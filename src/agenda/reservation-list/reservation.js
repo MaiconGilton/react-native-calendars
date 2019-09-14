@@ -1,15 +1,16 @@
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import {xdateToData} from '../../interface';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { xdateToData } from '../../interface';
 import XDate from 'xdate';
 import dateutils from '../../dateutils';
 import styleConstructor from './style';
 
 class ReservationListItem extends Component {
   static displayName = 'IGNORE';
-  
+
   constructor(props) {
     super(props);
+
     this.styles = styleConstructor(props.theme);
   }
 
@@ -47,24 +48,34 @@ class ReservationListItem extends Component {
       );
     } else {
       return (
-        <View style={this.styles.day}/>
+        <View style={this.styles.day} />
       );
     }
   }
 
   render() {
-    const {reservation, date} = this.props.item;
+    const { reservation, date } = this.props.item;
     let content;
     if (reservation) {
-      const firstItem = date ? true : false;
+      var firstItem = date ? true : false;
       content = this.props.renderItem(reservation, firstItem);
     } else {
       content = this.props.renderEmptyDate(date);
     }
+    if (firstItem || !reservation)
+      return (
+        <View style={[this.styles.container, this.styles.separator]}>
+          {this.renderDate(date, reservation)}
+          <View style={{ flex: 1 }}>
+            {content}
+          </View>
+        </View>
+      );
+
     return (
       <View style={this.styles.container}>
         {this.renderDate(date, reservation)}
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           {content}
         </View>
       </View>
