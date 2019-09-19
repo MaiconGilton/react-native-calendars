@@ -14,7 +14,6 @@ import moment from 'moment';
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
-
 const HEADER_HEIGHT = 145;
 const KNOB_HEIGHT = 40;
 //Fallback when RN version is < 0.44
