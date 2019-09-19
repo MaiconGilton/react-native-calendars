@@ -19,6 +19,7 @@ const KNOB_HEIGHT = 40;
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
 
+
 /**
  * @description: Agenda component
  * @extends: CalendarList
