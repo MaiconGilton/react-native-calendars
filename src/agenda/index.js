@@ -10,8 +10,12 @@ import ReservationsList from './reservation-list';
 import styleConstructor from './style';
 import { VelocityTracker } from '../input';
 
+import moment from 'moment';
+import 'moment/locale/pt-br'
+moment.locale('pt-br')
 
-const HEADER_HEIGHT = 120;
+
+const HEADER_HEIGHT = 145;
 const KNOB_HEIGHT = 40;
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
@@ -82,7 +86,8 @@ export default class AgendaView extends Component {
     /** Set this true while waiting for new data from a refresh. */
     refreshing: PropTypes.bool,
     /** Display loading indicador. Default = false */
-    displayLoadingIndicator: PropTypes.bool
+    displayLoadingIndicator: PropTypes.bool,
+    shortCalendarMonthTextStyle: PropTypes.object,
   };
 
   constructor(props) {
@@ -103,6 +108,7 @@ export default class AgendaView extends Component {
       firstResevationLoad: false,
       selectedDay: parseDate(this.props.selected) || XDate(true),
       topDay: parseDate(this.props.selected) || XDate(true),
+      currentDate: this.props.selected
     };
 
     this.currentMonth = this.state.selectedDay.clone();
@@ -118,7 +124,7 @@ export default class AgendaView extends Component {
   }
 
   calendarOffset() {
-    return 100 - (this.viewHeight / 2);
+    return 135 - (this.viewHeight / 1.75);
   }
 
   initialScrollPadPosition() {
@@ -313,6 +319,8 @@ export default class AgendaView extends Component {
     if (this.props.onDayChange) {
       this.props.onDayChange(xdateToData(newDate));
     }
+
+    this.setState({ currentDate: newDate[0] })
   }
 
   generateMarkings() {
@@ -334,6 +342,8 @@ export default class AgendaView extends Component {
   render() {
     const agendaHeight = Math.max(0, this.viewHeight - HEADER_HEIGHT);
     const weekDaysNames = dateutils.weekDayNames(this.props.firstDay);
+    // console.log(this.state.currentMonth);
+    // const monthName = dateutils.month(this.props.firstDay);
 
     const weekdaysStyle = [this.styles.weekdays, {
       opacity: this.state.scrollY.interpolate({
@@ -432,11 +442,14 @@ export default class AgendaView extends Component {
           </Animated.View>
           {knob}
         </Animated.View>
-        <Animated.View style={weekdaysStyle}>
-          {this.props.showWeekNumbers && <Text allowFontScaling={false} style={this.styles.weekday} numberOfLines={1}></Text>}
-          {weekDaysNames.map((day, index) => (
-            <Text allowFontScaling={false} key={day + index} style={this.styles.weekday} numberOfLines={1}>{day}</Text>
-          ))}
+        <Animated.View style={[weekdaysStyle, {}]}>
+          <View style={[this.styles.weekdays, { top: 30 }]}>
+            {this.props.showWeekNumbers && <Text allowFontScaling={false} style={this.styles.weekday} numberOfLines={1}></Text>}
+            {weekDaysNames.map((day, index) => (
+              <Text allowFontScaling={false} key={day + index} style={this.styles.weekday} numberOfLines={1}>{day}</Text>
+            ))}
+          </View>
+          <Text style={[this.props.shortCalendarMonthTextStyle, { top: 0 }]}>{moment(this.state.currentDate).format('MMMM')}</Text>
         </Animated.View>
         <Animated.ScrollView
           ref={c => this.scrollPad = c}
