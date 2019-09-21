@@ -14,11 +14,11 @@ import moment from 'moment';
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
+
 const HEADER_HEIGHT = 145;
 const KNOB_HEIGHT = 40;
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
-
 
 /**
  * @description: Agenda component
@@ -124,7 +124,7 @@ export default class AgendaView extends Component {
   }
 
   calendarOffset() {
-    return 135 - (this.viewHeight / 1.75);
+    return 85 - (this.viewHeight / 2);
   }
 
   initialScrollPadPosition() {
@@ -257,7 +257,6 @@ export default class AgendaView extends Component {
 
   chooseDay(d, optimisticScroll) {
     const day = parseDate(d);
-
     this.setState({
       calendarScrollable: false,
       selectedDay: day.clone()
@@ -307,11 +306,11 @@ export default class AgendaView extends Component {
     );
   }
 
-  onDayChange(day) {
+  onDayChange(day) {  // day format === XDate {0: Wed, 17 May 2017 00:00:00 GMT}
     const newDate = parseDate(day);
     const withAnimation = dateutils.sameMonth(newDate, this.state.selectedDay);
 
-    this.calendar.scrollToDay(day, this.calendarOffset(), withAnimation);
+    this.calendar.scrollToDay(parseDate(day), this.calendarOffset(), withAnimation);
     this.setState({
       selectedDay: parseDate(day)
     });
@@ -320,7 +319,8 @@ export default class AgendaView extends Component {
       this.props.onDayChange(xdateToData(newDate));
     }
 
-    this.setState({ currentDate: newDate[0] })
+    this.setState({ currentDate: newDate[0] }) // currentDate format === Sun, 21 May 2017 00:00:00 GMT
+    // this.setState({ currentDate: new Date(moment(day)) })
   }
 
   generateMarkings() {
@@ -340,9 +340,9 @@ export default class AgendaView extends Component {
   }
 
   render() {
+    // console.log(this.state.currentDate)
     const agendaHeight = Math.max(0, this.viewHeight - HEADER_HEIGHT);
     const weekDaysNames = dateutils.weekDayNames(this.props.firstDay);
-    // console.log(this.state.currentMonth);
     // const monthName = dateutils.month(this.props.firstDay);
 
     const weekdaysStyle = [this.styles.weekdays, {
@@ -449,7 +449,7 @@ export default class AgendaView extends Component {
               <Text allowFontScaling={false} key={day + index} style={this.styles.weekday} numberOfLines={1}>{day}</Text>
             ))}
           </View>
-          <Text style={[this.props.shortCalendarMonthTextStyle, { top: 0 }]}>{moment(this.state.currentDate).format('MMMM')}</Text>
+          <Text style={[this.props.shortCalendarMonthTextStyle, { top: 0 }]}>{moment(this.state.currentDate).format('MMMM YYYY')}</Text>
         </Animated.View>
         <Animated.ScrollView
           ref={c => this.scrollPad = c}

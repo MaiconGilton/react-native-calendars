@@ -4,6 +4,7 @@ import { xdateToData } from '../../interface';
 import XDate from 'xdate';
 import dateutils from '../../dateutils';
 import styleConstructor from './style';
+import moment from 'moment';
 
 class ReservationListItem extends Component {
   static displayName = 'IGNORE';
@@ -21,13 +22,13 @@ class ReservationListItem extends Component {
     if (!r1 && !r2) {
       changed = false;
     } else if (r1 && r2) {
-      if (r1.day.getTime() !== r2.day.getTime()) {
+      if (r1.date.getTime() !== r2.date.getTime()) {
         changed = true;
-      } else if (!r1.reservation && !r2.reservation) {
+      } else if (!r1.events && !r2.events) {
         changed = false;
-      } else if (r1.reservation && r2.reservation) {
+      } else if (r1.events && r2.events) {
         if ((!r1.date && !r2.date) || (r1.date && r2.date)) {
-          changed = this.props.rowHasChanged(r1.reservation, r2.reservation);
+          changed = this.props.rowHasChanged(r1.events, r2.events);
         }
       }
     }
@@ -54,27 +55,17 @@ class ReservationListItem extends Component {
   }
 
   render() {
-    const { reservation, date } = this.props.item;
+    const { events, date } = this.props.item;
     let content;
-    if (reservation) {
-      var firstItem = date ? true : false;
-      content = this.props.renderItem(reservation, firstItem);
+    if (events.length) {
+      content = this.props.renderItem(events, date);
     } else {
       content = this.props.renderEmptyDate(date);
     }
-    if (firstItem || !reservation)
-      return (
-        <View style={[this.styles.container, this.styles.separator]}>
-          {this.renderDate(date, reservation)}
-          <View style={{ flex: 1 }}>
-            {content}
-          </View>
-        </View>
-      );
 
     return (
       <View style={this.styles.container}>
-        {this.renderDate(date, reservation)}
+        {this.renderDate(date, events)}
         <View style={{ flex: 1 }}>
           {content}
         </View>
