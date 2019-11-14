@@ -103,6 +103,7 @@ export default class AgendaView extends Component {
 
     this.state = {
       scrollY: new Animated.Value(0),
+      childrenScrollY: new Animated.Value(0),
       calendarIsReady: false,
       calendarScrollable: false,
       firstResevationLoad: false,
@@ -229,6 +230,12 @@ export default class AgendaView extends Component {
       });
     } else {
       this.loadReservations(props);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.onScroll !== this.props.onScroll) {
+      this.state.childrenScrollY.setValue(this.props.onScroll)
     }
   }
 
@@ -372,6 +379,13 @@ export default class AgendaView extends Component {
       outputRange: [0, agendaHeight / 2],
       extrapolate: 'clamp'
     });
+    
+    const Translate = this.state.childrenScrollY.interpolate({
+      inputRange: [0, 100],
+      outputRange: [0, 100 / 2],
+      extrapolate: 'clamp'
+    });
+    // console.log('foi', Translate);
 
     const headerStyle = [
       this.styles.header,
