@@ -103,7 +103,6 @@ export default class AgendaView extends Component {
 
     this.state = {
       scrollY: new Animated.Value(0),
-      childrenScrollY: new Animated.Value(0),
       calendarIsReady: false,
       calendarScrollable: false,
       firstResevationLoad: false,
@@ -233,12 +232,6 @@ export default class AgendaView extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.onScroll !== this.props.onScroll) {
-      this.state.childrenScrollY.setValue(this.props.onScroll)
-    }
-  }
-
   enableCalendarScrolling() {
     this.setState({
       calendarScrollable: true
@@ -347,6 +340,14 @@ export default class AgendaView extends Component {
     return { ...markings, [key]: { ...(markings[key] || {}), ...{ selected: true } } };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.adjustPosition !== prevProps.adjustPosition) {
+      setTimeout(() => {
+        this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), true);
+      }, 10);
+    }
+  }
+
   render() {
     // console.log(this.state.currentDate)
     const agendaHeight = Math.max(0, this.viewHeight - HEADER_HEIGHT);
@@ -379,18 +380,12 @@ export default class AgendaView extends Component {
       outputRange: [0, agendaHeight / 2],
       extrapolate: 'clamp'
     });
-    
-    const Translate = this.state.childrenScrollY.interpolate({
-      inputRange: [0, 100],
-      outputRange: [0, 100 / 2],
-      extrapolate: 'clamp'
-    });
-    // console.log('foi', Translate);
 
     const headerStyle = [
       this.styles.header,
       { bottom: agendaHeight, transform: [{ translateY: headerTranslate }] }
     ];
+    // console.log(this.props.onScroll)
 
     if (!this.state.calendarIsReady) {
       // limit header height until everything is setup for calendar dragging
@@ -424,8 +419,8 @@ export default class AgendaView extends Component {
     return (
       <View onLayout={this.onLayout} style={[this.props.style, { flex: 1, overflow: 'hidden' }]}>
         <View style={this.styles.reservations}>
-        {/* {this.renderReservations()} */}
-        {this.props.renderBody}
+          {/* {this.renderReservations()} */}
+          {this.props.renderBody}
         </View>
         <Animated.View style={headerStyle}>
           <Animated.View style={{ flex: 1, transform: [{ translateY: contentTranslate }] }}>
