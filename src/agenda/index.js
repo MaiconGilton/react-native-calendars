@@ -344,7 +344,10 @@ export default class AgendaView extends Component {
     if (this.props.adjustPosition !== prevProps.adjustPosition) {
       setTimeout(() => {
         this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), true);
-      }, 10);
+      }, 100);
+    }
+    if (this.props.backToToday !== prevProps.backToToday) {
+      this._chooseDayFromCalendar(XDate(true))
     }
   }
 
