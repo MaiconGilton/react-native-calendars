@@ -15,8 +15,8 @@ import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
 
-const HEADER_HEIGHT = 145;
-const KNOB_HEIGHT = 40;
+const HEADER_HEIGHT = 135;
+const KNOB_HEIGHT = 30;
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
 
@@ -124,7 +124,7 @@ export default class AgendaView extends Component {
   }
 
   calendarOffset() {
-    return 85 - (this.viewHeight / 2);
+    return 80 - (this.viewHeight / 2);
   }
 
   initialScrollPadPosition() {
@@ -342,9 +342,7 @@ export default class AgendaView extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.adjustPosition !== prevProps.adjustPosition) {
-      setTimeout(() => {
-        this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), true);
-      }, 100);
+      this.calendar.scrollToDay(this.state.selectedDay.clone(), this.calendarOffset(), true);
     }
     if (this.props.backToToday !== prevProps.backToToday) {
       this._chooseDayFromCalendar(XDate(true))
@@ -421,10 +419,12 @@ export default class AgendaView extends Component {
 
     return (
       <View onLayout={this.onLayout} style={[this.props.style, { flex: 1, overflow: 'hidden' }]}>
+
         <View style={this.styles.reservations}>
           {/* {this.renderReservations()} */}
           {this.props.renderBody}
         </View>
+
         <Animated.View style={headerStyle}>
           <Animated.View style={{ flex: 1, transform: [{ translateY: contentTranslate }] }}>
             <CalendarList
@@ -454,17 +454,22 @@ export default class AgendaView extends Component {
               showWeekNumbers={this.props.showWeekNumbers}
             />
           </Animated.View>
+
           {knob}
         </Animated.View>
+
         <Animated.View style={[weekdaysStyle, {}]}>
+
           <View style={[this.styles.weekdays, { top: 30 }]}>
             {this.props.showWeekNumbers && <Text allowFontScaling={false} style={this.styles.weekday} numberOfLines={1}></Text>}
             {weekDaysNames.map((day, index) => (
               <Text allowFontScaling={false} key={day + index} style={this.styles.weekday} numberOfLines={1}>{day}</Text>
             ))}
           </View>
+
           <Text style={[this.props.shortCalendarMonthTextStyle, { top: 0 }]}>{moment(this.state.currentDate).format('MMMM YYYY')}</Text>
         </Animated.View>
+
         <Animated.ScrollView
           ref={c => this.scrollPad = c}
           overScrollMode='never'
