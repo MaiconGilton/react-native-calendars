@@ -285,10 +285,6 @@ export default class AgendaView extends Component {
             this.props.onDayPress(xdateToData(day));
             this.setState({ currentDate: parseDate(day)[0] })
         }
-
-        if (this.props.onDayLongPress) {
-            this.props.onDayLongPress(xdateToData(day));
-        }
     }
 
     renderReservations() {
@@ -448,7 +444,7 @@ export default class AgendaView extends Component {
                             markingType={this.props.markingType}
                             removeClippedSubviews={this.props.removeClippedSubviews}
                             onDayPress={this._chooseDayFromCalendar.bind(this)}
-                            onDayLongPress={this._chooseDayFromCalendar.bind(this)}
+                            onDayLongPress={this.props.onDayLongPress}
                             scrollEnabled={this.state.calendarScrollable}
                             hideExtraDays={this.state.calendarScrollable}
                             firstDay={this.props.firstDay}
