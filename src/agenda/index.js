@@ -349,7 +349,7 @@ export default class AgendaView extends Component {
             }, 100);
         }
         if (this.props.backToToday !== prevProps.backToToday) {
-            this._chooseDayFromCalendar(XDate(true))
+            this._chooseDayFromCalendar(this.props.backToToday)
         }
     }
 
