@@ -466,7 +466,7 @@ export default class AgendaView extends Component {
                             <Text allowFontScaling={false} key={day + index} style={this.styles.weekday} numberOfLines={1}>{day}</Text>
                         ))}
                     </View>
-                    <Text style={[this.props.shortCalendarMonthTextStyle, { top: 0 }]}>{moment(this.state.currentDate).format('MMMM YYYY')}</Text>
+                    <Text style={[this.props.shortCalendarMonthTextStyle, { top: 0 }]}>{moment(this.state.currentDate).utc().format('MMMM YYYY')}</Text>
                 </Animated.View>
                 <Animated.ScrollView
                     ref={c => this.scrollPad = c}
