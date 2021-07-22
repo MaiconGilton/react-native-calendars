@@ -105,6 +105,13 @@ class Calendar extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.currentTheme !== prevProps.currentTheme) {
+            this.style = styleConstructor(this.props.theme);
+            this.setState({ refreshStyles: new Date() })
+        }
+    }
+
     updateMonth(day, doNotTriggerListeners) {
         if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
             return;
@@ -260,6 +267,7 @@ class Calendar extends Component {
             <View style={[this.style.container, this.props.style]}>
                 <CalendarHeader
                     style={this.props.headerStyle}
+                    currentTheme={this.props.currentTheme}
                     theme={this.props.theme}
                     hideArrows={this.props.hideArrows}
                     month={this.state.currentMonth}
