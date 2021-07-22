@@ -14,7 +14,6 @@ import moment from 'moment';
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
-
 const HEADER_HEIGHT = 115;
 const KNOB_HEIGHT = 30;
 //Fallback when RN version is < 0.44
@@ -351,6 +350,10 @@ export default class AgendaView extends Component {
         if (this.props.backToToday !== prevProps.backToToday) {
             this._chooseDayFromCalendar(this.props.backToToday)
         }
+        if (this.props.currentTheme !== prevProps.currentTheme) {
+            this.styles = styleConstructor(this.props.theme);
+            this.setState({ refreshStyles: new Date() })
+        }
     }
 
     render() {
@@ -440,6 +443,7 @@ export default class AgendaView extends Component {
                             }}
                             calendarWidth={this.viewWidth}
                             theme={this.props.theme}
+                            currentTheme={this.props.currentTheme}
                             onVisibleMonthsChange={this.onVisibleMonthsChange.bind(this)}
                             ref={(c) => this.calendar = c}
                             minDate={this.props.minDate}
