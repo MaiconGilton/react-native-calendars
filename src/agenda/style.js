@@ -22,7 +22,7 @@ export default function styleConstructor(theme = {}) {
             top: 0,
             paddingTop: 28,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'space-around',
             paddingHorizontal: 20,
             backgroundColor: appStyle.calendarBackground,
         },
@@ -57,7 +57,7 @@ export default function styleConstructor(theme = {}) {
             color: appStyle.textSectionTitleColor,
             fontSize: appStyle.textDayHeaderFontSize,
             fontFamily: appStyle.textDayHeaderFontFamily,
-            fontWeight: appStyle.textDayHeaderFontWeight
+            fontWeight: appStyle.textDayHeaderFontWeight,
         },
         reservations: {
             flex: 1,
