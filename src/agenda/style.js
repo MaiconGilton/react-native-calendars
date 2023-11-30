@@ -60,7 +60,7 @@ export default function styleConstructor(theme = {}) {
     },
     reservations: {
       flex: 1,
-      marginTop: 124,
+      marginTop: 130,
       backgroundColor: appStyle.backgroundColor
     },
     ...(theme[STYLESHEET_ID] || {})
